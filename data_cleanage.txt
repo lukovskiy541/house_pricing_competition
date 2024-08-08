@@ -1,0 +1,109 @@
+- Take first look at data
+nfl_data.head()
+
+- How many missing data points do we have?
+
+missing_values_count = nfl_data.isnull().sum()
+missing_values_count[0:10]
+
+- By percentage
+total_cells = np.product(nfl_data.shape)
+total_missing = missing_values_count.sum()
+percent_missing = (total_missing/total_cells) * 100
+print(percent_missing)
+
+- Figure out why the data is missing
+Is this value missing because it wasn't recorded or because it doesn't exist?
+if it was missing because it wasn't recoreded better to try guess what there should be
+
+if not good way to fill a new value
+
+- Drop missing values
+nfl_data.dropna()
+
+- Filling in missing values automatically
+subset_nfl_data.fillna(0)
+subset_nfl_data.fillna(method='bfill', axis=0).fillna(0) replace all NA's the value that comes directly after it in the same column
+
+how to choose features
+
+supervised - after removing result is measuring
+unsupervised - result is ignored after removing
+
+filter, wrapper, and embedded
+filter -  evaluate the features based on correlation, variance, or information gain.
+dis - may ignore interactions and dependencies among the features or the model.
+wrapper - a subset of features to train and test a model and measure its performance using some criteria. 
+dis - more computationally expensive and prone to overfitting.
+Embedded  - incorporating the feature selection process within the model training
+
+automate - SelectKBest, SelectFromModel, RFE, RFECV, BorutaPy, MLxtend
+
+Preprocess and normalize your data before feature selection
+
+
+- Filter methods: 
+
+num input, num output - pearson for linear, spearman nonlinear
+num input, cat output - anova, kendall rank
+cat input, num output - anova, kendall rank
+cat input, cat output - chi-squared test, information gain
+
+
+- Tricks for filter methods: 
+
+implementation in scikit-learn:
+Pearson’s Correlation Coefficient: f_regression()
+ANOVA: f_classif()
+Chi-Squared: chi2()
+Mutual Information: mutual_info_classif() and mutual_info_regression()
+
+filtering methods once statistics have been calculated:
+Select the top k variables: SelectKBest
+Select the top percentile variables: SelectPercentile
+
+transform variables:
+transform cat to ordinal
+numerical - discrete via bins
+
+
+- Working examples
+
+num input, num output:
+# pearson's correlation feature selection for numeric input and numeric output
+from sklearn.datasets import make_regression
+from sklearn.feature_selection import SelectKBest
+from sklearn.feature_selection import f_regression
+# generate dataset
+X, y = make_regression(n_samples=100, n_features=100, n_informative=10)
+# define feature selection
+fs = SelectKBest(score_func=f_regression, k=10)
+# apply feature selection
+X_selected = fs.fit_transform(X, y)
+print(X_selected.shape)
+
+num input, cat output:
+# ANOVA feature selection for numeric input and categorical output
+from sklearn.datasets import make_classification
+from sklearn.feature_selection import SelectKBest
+from sklearn.feature_selection import f_classif
+# generate dataset
+X, y = make_classification(n_samples=100, n_features=20, n_informative=2)
+# define feature selection
+fs = SelectKBest(score_func=f_classif, k=2)
+# apply feature selection
+X_selected = fs.fit_transform(X, y)
+print(X_selected.shape)
+
+
+
+Scaling and normalization
+
+scaled_data = minmax_scaling(original_data, columns=[0])
+normalized_data = stats.boxcox(original_data)
+normalized_pledges = pd.Series(stats.boxcox(positive_pledges)[0], 
+                               name='pledged', index=positive_pledges.index)
+
+
+
+
