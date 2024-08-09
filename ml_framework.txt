@@ -1,0 +1,14 @@
+DATA CLEANAGE
+
+
+drop column:
+housing.dropna(subset=["total_bedrooms"], inplace=True)
+
+from sklearn.impute import SimpleImputer
+imputer = SimpleImputer(strategy="median")
+strategys = median, mean, most_frequent
+X = imputer.transform(housing_num)
+or
+KNNImputer
+IterativeImputer
+
