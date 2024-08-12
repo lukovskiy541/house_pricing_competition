@@ -1,3 +1,5 @@
+train_test_split
+
 DATA CLEANAGE
 
 
@@ -11,4 +13,28 @@ X = imputer.transform(housing_num)
 or
 KNNImputer
 IterativeImputer
+
+
+when data symetric but heavy tail - log
+assymetric - sqrt
+segmentization - 
+multimodal:
+    segment but using onehot encoder
+
+
+scaling - 
+from sklearn.preprocessing import StandardScaler
+std_scaler = StandardScaler()
+housing_num_std_scaled = std_scaler.fit_transform(housing_num)
+
+transforming target
+from sklearn.compose import TransformedTargetRegressor
+model = TransformedTargetRegressor(LinearRegression(),
+ transformer=StandardScaler())
+ model.fit(housing[["median_income"]], housing_labels)
+predictions = model.predict(some_new_data)
+log_transformer = FunctionTransformer(np.log, inverse_func=np.exp)
+log_pop = log_transformer.transform(housing[["population"]])
+
+
 
